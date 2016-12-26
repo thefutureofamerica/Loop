@@ -9,7 +9,7 @@
 import Foundation
 
 
-class DiagnosticLogger {
+final class DiagnosticLogger {
     private lazy var isSimulator: Bool = TARGET_OS_SIMULATOR != 0
 
     var mLabService: MLabService {
@@ -26,9 +26,9 @@ class DiagnosticLogger {
         }
     }
 
-    func addMessage(message: [String: AnyObject], toCollection collection: String) {
+    func addMessage(_ message: [String: Any], toCollection collection: String) {
         if !isSimulator,
-            let messageData = try? NSJSONSerialization.dataWithJSONObject(message, options: []),
+            let messageData = try? JSONSerialization.data(withJSONObject: message, options: []),
             let task = mLabService.uploadTaskWithData(messageData, inCollection: collection)
         {
             task.resume()
